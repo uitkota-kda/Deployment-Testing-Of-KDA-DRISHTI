@@ -1,9 +1,12 @@
 {
   "name": "kda-drishti-root",
   "version": "1.0.0",
-  "description": "Root proxy for Render deployment",
+  "main": "server/index.js",
   "scripts": {
     "install-all": "cd server && npm install",
-    "start": "cd server && node index.js"
+    "start": "node server/index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

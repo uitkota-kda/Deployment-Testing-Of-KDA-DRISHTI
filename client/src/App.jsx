@@ -796,7 +796,7 @@ function LandingPage() {
             </div>
             <div>
               <h4 style={{ marginBottom: '1.5rem' }}>Contact Info</h4>
-              <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Collectorate Premises, Rawatbhata Rd, Kota, Rajasthan 324001</p>
+              <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Address: CAD Circle, Rawatbhata Rd, CAD Colony, Dadabari, Kota, Rajasthan 324009</p>
               <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Phone: 0744 250 5123</p>
             </div>
           </div>

@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: kda-drishti-server
+    env: node
+    rootDir: server
+    buildCommand: npm install && npx prisma generate
+    startCommand: node index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: JWT_SECRET
+        value: kda_super_secret_key_2026
+      - key: PORT
+        value: 10000

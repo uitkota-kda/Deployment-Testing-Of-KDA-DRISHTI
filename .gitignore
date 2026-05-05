@@ -1,0 +1,29 @@
+# General
+node_modules/
+dist/
+build/
+.temp/
+.cache/
+
+# Environment and Secrets
+.env
+.env.*
+firebase-service-account.json
+
+# Database
+server/dev.db
+server/dev.db-journal
+
+# Logs
+*.log
+firebase-debug.log
+
+# Firebase CLI
+.firebase/
+.firebaserc
+
+# IDEs and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

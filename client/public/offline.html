@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Offline - KDA Drishti</title>
+    <style>
+        body { 
+            background: #0a0f1e; 
+            color: #fff; 
+            font-family: system-ui, -apple-system, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+            text-align: center; 
+            padding: 2rem;
+        }
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.4));
+        }
+        h1 { 
+            margin-bottom: 1rem; 
+            color: #fff;
+            font-size: 1.75rem;
+        }
+        p { 
+            color: #94a3b8; 
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 400px;
+        }
+        .btn { 
+            background: linear-gradient(135deg, #6366f1, #8b5cf6); 
+            color: white; 
+            border: none; 
+            padding: 1rem 2rem; 
+            border-radius: 1rem; 
+            cursor: pointer; 
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: transform 0.2s;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+    </svg>
+    <h1>No Internet Connection</h1>
+    <p>You are currently offline. Please check your network connection to access the KDA Project Monitoring System.</p>
+    <button class="btn" onclick="window.location.reload()">Try Again</button>
+</body>
+</html>

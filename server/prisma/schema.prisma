@@ -1,0 +1,207 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DEO
+  ENGINEER
+  VIEWER
+}
+
+enum ProjectType {
+  EXECUTION
+  CONSULTANCY
+}
+
+enum ProjectStatus {
+  ONGOING
+  COMPLETED
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  mobile      String   @unique
+  name        String
+  password    String   @default("123456")
+  designation String?
+  role        String   @default("ENGINEER") // ADMIN, DEO, ENGINEER, VIEWER
+  updates     ProjectUpdate[]
+  logs        AuditLog[]
+  directions  ProjectDirection[]
+  isDeleted   Boolean  @default(false)
+}
+
+model Project {
+  id                    Int             @id @default(autoincrement())
+  name                  String          @unique
+  type                  ProjectType     // EXECUTION, CONSULTANCY
+  consultancySource     String?         @default("NIT") // NIT, SINGLE_SOURCE
+  brief                 String          @default("")
+  fundingAgency         String
+  estimatedCost         Float           // In Lakhs
+  inchargeName          String
+  inchargeMobile        String
+  
+  // Execution specific
+  consultantName        String?
+  consultantMobile      String?
+  contractorName        String?
+  contractorMobile      String?
+  
+  actualStartDate       DateTime?
+  stipulatedCompletionDate DateTime?
+  
+  workStarted           String          @default("No") // Yes/No
+  delayReasons          String?
+  delayBrief            String?         // Reason if work not started
+  
+  overallStatus          String          @default("On Track") // On Track, Delay, On Hold
+  statusHoldReason       String?
+  statusDelayReasons     String?         // JSON array of strings
+  statusDelayBrief       String?
+  todaysUpdateNote       String?         @default("")
+  qualitySampling        String?         @default("No") // Yes/No
+  qualitySamplingReason  String?         @default("")
+  expectedCompletionDate DateTime?
+  timeExtension          String?
+  
+  status                String          @default("ONGOING") // ONGOING, COMPLETED
+  isLegacy              Boolean         @default(false)
+  currentProgress       Float           @default(0) // 0-100
+  gpsLat                Float?
+  gpsLong               Float?
+  
+  // Dynamic Configuration
+  configVersionId       Int?
+  configVersion         ConfigVersion?  @relation(fields: [configVersionId], references: [id])
+  fieldData             String?         // JSON string: { fieldKey: value }
+  stageData             String?         // JSON string: { stageKey: { isCompleted, date, value, reason } }
+
+  // Relations
+  workflows             ProjectWorkflow[]
+  pertActivities        PertActivity[]
+  updates               ProjectUpdate[]
+  auditLogs             AuditLog[]
+  directions            ProjectDirection[]
+  
+  isDeleted             Boolean         @default(false)
+  deletedAt             DateTime?
+  
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+}
+
+model ConfigVersion {
+  id             Int            @id @default(autoincrement())
+  versionNumber  Int            @unique
+  createdAt      DateTime       @default(now())
+  createdBy      Int
+  isActive       Boolean        @default(false) // If true, this is the version for NEW projects
+  stages         ProjectStage[]
+  fields         ProjectField[]
+  projects       Project[]
+}
+
+model ProjectStage {
+  id             Int            @id @default(autoincrement())
+  stageKey       String         // Fixed internal key
+  displayName    String         // Editable
+  sequenceOrder  Int
+  isActive       Boolean        @default(true)
+  versionId      Int
+  version        ConfigVersion  @relation(fields: [versionId], references: [id])
+}
+
+model ProjectField {
+  id             Int            @id @default(autoincrement())
+  fieldKey       String         // Fixed internal key
+  displayName    String         // Editable
+  fieldType      String         // text, date, number, select
+  isRequired     Boolean        @default(false)
+  isActive       Boolean        @default(true)
+  location       String         @default("MASTER") // MASTER, CONTRACTOR, FINANCIAL, OTHER
+  sequenceOrder  Int            @default(0)
+  versionId      Int
+  version        ConfigVersion  @relation(fields: [versionId], references: [id])
+}
+
+model ProjectDirection {
+  id        Int      @id @default(autoincrement())
+  direction String
+  timestamp DateTime @default(now())
+  projectId Int
+  userId    Int
+  project   Project  @relation(fields: [projectId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model ProjectWorkflow {
+  id          Int      @id @default(autoincrement())
+  stageKey    String?  // Linked to ProjectStage.stageKey
+  stepName    String
+  isCompleted Boolean  @default(false)
+  date        DateTime?
+  value       String?  // Yes/No
+  reason      String?  // If No
+  projectId   Int
+  project     Project  @relation(fields: [projectId], references: [id])
+}
+
+model PertActivity {
+  id          Int      @id @default(autoincrement())
+  projectId   Int
+  project     Project  @relation(fields: [projectId], references: [id])
+  name        String
+  weightage   Float    // Total should be 100%
+  startDate   DateTime
+  endDate     DateTime
+  progress    Float    @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model ProjectUpdate {
+  id                Int      @id @default(autoincrement())
+  projectId         Int
+  project           Project  @relation(fields: [projectId], references: [id])
+  userId            Int
+  user              User     @relation(fields: [userId], references: [id])
+  physicalProgress  Float
+  financialProgress Float
+  gpsLat            Float?
+  gpsLong           Float?
+  photos            String   // Stored as JSON string [url1, url2]
+  remarks           String
+  
+  overallStatus          String?
+  statusHoldReason       String?
+  statusDelayReasons     String?
+  statusDelayBrief       String?
+  todaysUpdateNote       String?
+  qualitySampling        String?         @default("No") // Yes/No
+  qualitySamplingReason  String?         @default("")
+  expectedCompletionDate DateTime?
+  timeExtension          String?
+  
+  fieldData         String?         // JSON string: { fieldKey: value }
+  timestamp         DateTime @default(now())
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  projectId Int?
+  project   Project? @relation(fields: [projectId], references: [id])
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  details   String
+  timestamp DateTime @default(now())
+}

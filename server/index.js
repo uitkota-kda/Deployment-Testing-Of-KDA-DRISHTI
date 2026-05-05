@@ -164,11 +164,11 @@ app.get('/api/dashboard/stats', requireAuth, async (req, res) => {
         submitted: projects.filter(p => {
           const projectWorkflows = workflows.filter(w => w.projectId === p.id);
           return projectWorkflows.some(w => (w.stepName === 'DPR Submitted' || w.stageKey === 'DPR_SUBMITTED') && w.isCompleted);
-        }).length,
+        }).length || 0,
         approved: projects.filter(p => {
           const projectWorkflows = workflows.filter(w => w.projectId === p.id);
           return projectWorkflows.some(w => (w.stepName === 'DPR Approved' || w.stageKey === 'DPR_APPROVED') && w.isCompleted);
-        }).length,
+        }).length || 0,
       }
     };
     return sendResponse(res, true, 'Stats fetched', stats);

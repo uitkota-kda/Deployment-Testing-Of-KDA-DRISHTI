@@ -897,7 +897,8 @@ function AdminDashboard() {
         <StatCard label="Total Projects" value={stats.total} icon={<FileText color="#6366f1" />} />
         <StatCard label="Ongoing Works" value={stats.ongoing} icon={<TrendingUp color="#10b981" />} />
         <StatCard label="Completed" value={stats.completed} icon={<CheckCircle2 color="#f59e0b" />} />
-        <StatCard label="DPRs Submitted" value={stats.dprStatus.submitted} icon={<Info color="#a855f7" />} />
+        <StatCard label="DPRs Submitted" value={stats.dprStatus?.submitted || 0} icon={<Info color="#a855f7" />} />
+        <StatCard label="DPRs Approved" value={stats.dprStatus?.approved || 0} icon={<CheckCircle2 color="#8b5cf6" />} />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>

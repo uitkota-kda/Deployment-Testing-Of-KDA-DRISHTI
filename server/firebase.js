@@ -1,9 +1,17 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./firebase-service-account.json');
 
 if (!admin.apps.length) {
+  let credential;
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    credential = admin.credential.cert(serviceAccount);
+  } else {
+    const serviceAccount = require('./firebase-service-account.json');
+    credential = admin.credential.cert(serviceAccount);
+  }
+
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential,
     databaseURL: "https://kda-drishti-default-rtdb.firebaseio.com",
     storageBucket: "kda-drishti.appspot.com"
   });

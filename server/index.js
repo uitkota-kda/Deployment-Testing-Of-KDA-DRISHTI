@@ -159,6 +159,16 @@ app.get('/api/dashboard/stats', requireAuth, async (req, res) => {
       typeDistribution: {
         execution: projects.filter(p => p.type === 'EXECUTION').length,
         consultancy: projects.filter(p => p.type === 'CONSULTANCY').length,
+      },
+      dprStatus: {
+        submitted: projects.filter(p => {
+          const projectWorkflows = workflows.filter(w => w.projectId === p.id);
+          return projectWorkflows.some(w => (w.stepName === 'DPR Submitted' || w.stageKey === 'DPR_SUBMITTED') && w.isCompleted);
+        }).length,
+        approved: projects.filter(p => {
+          const projectWorkflows = workflows.filter(w => w.projectId === p.id);
+          return projectWorkflows.some(w => (w.stepName === 'DPR Approved' || w.stageKey === 'DPR_APPROVED') && w.isCompleted);
+        }).length,
       }
     };
     return sendResponse(res, true, 'Stats fetched', stats);

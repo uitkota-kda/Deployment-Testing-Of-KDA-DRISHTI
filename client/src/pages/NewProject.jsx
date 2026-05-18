@@ -271,6 +271,8 @@ export default function NewProject() {
               { stageKey: 'AF_SANCTION', stepName: 'A&F Received', isCompleted: false, value: 'No', reason: '', date: '' },
               { stageKey: 'NIT_PUBLISHED', stepName: 'NIT Published', isCompleted: false, value: 'No', reason: '', date: '' },
               { stageKey: 'TENDER_OPENED', stepName: 'Tender Opened', isCompleted: false, value: 'No', reason: '', date: '' },
+              { stageKey: 'BID_TECH_EVAL', stepName: 'Bid Technical Evaluation', isCompleted: false, value: 'No', reason: '', date: '' },
+              { stageKey: 'BID_FIN_EVAL', stepName: 'Bid Financial Evaluation', isCompleted: false, value: 'No', reason: '', date: '' },
               { stageKey: 'WORK_ORDER', stepName: 'Work Order Issued', isCompleted: false, value: 'No', reason: '', date: '' },
               { stageKey: 'DRAFT_DPR_SUBMITTED', stepName: 'Draft DPR Submitted', isCompleted: false, value: 'No', reason: '', date: '' },
               { stageKey: 'DRAFT_DPR_APPROVED', stepName: 'Draft DPR Approved', isCompleted: false, value: 'No', reason: '', date: '' },
@@ -284,6 +286,8 @@ export default function NewProject() {
               { stageKey: 'TECH_SANCTION', stepName: 'Technical Sanction', isCompleted: false, value: 'No', reason: '', date: '' },
               { stageKey: 'NIT_PUBLISHED', stepName: 'NIT Published', isCompleted: false, value: 'No', reason: '', date: '' },
               { stageKey: 'TENDER_OPENED', stepName: 'Tender Opened', isCompleted: false, value: 'No', reason: '', date: '' },
+              { stageKey: 'BID_TECH_EVAL', stepName: 'Bid Technical Evaluation', isCompleted: false, value: 'No', reason: '', date: '' },
+              { stageKey: 'BID_FIN_EVAL', stepName: 'Bid Financial Evaluation', isCompleted: false, value: 'No', reason: '', date: '' },
               { stageKey: 'WORK_ORDER', stepName: 'Work Order Issued', isCompleted: false, value: 'No', reason: '', date: '' }
             ]);
           }
@@ -788,6 +792,8 @@ export default function NewProject() {
                       tail = [
                         { stepName: 'NIT Published', isCompleted: false, value: 'No', reason: '', date: '' },
                         { stepName: 'Tender Opened', isCompleted: false, value: 'No', reason: '', date: '' },
+                        { stepName: 'Bid Technical Evaluation', isCompleted: false, value: 'No', reason: '', date: '' },
+                        { stepName: 'Bid Financial Evaluation', isCompleted: false, value: 'No', reason: '', date: '' },
                         { stepName: 'Work Order Issued', isCompleted: false, value: 'No', reason: '', date: '' },
                         { stepName: 'Draft DPR Submitted', isCompleted: false, value: 'No', reason: '', date: '' },
                         { stepName: 'Draft DPR Approved', isCompleted: false, value: 'No', reason: '', date: '' },

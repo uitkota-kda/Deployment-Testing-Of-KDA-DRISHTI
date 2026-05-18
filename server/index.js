@@ -77,7 +77,7 @@ const validateWorkflowDates = (workflows) => {
 
   const SEQUENCE = [
     'AF_SANCTION', 'TECH_SANCTION', 'NIT_PUBLISHED', 'TENDER_OPENED', 
-    'WORK_ORDER', 
+    'BID_TECH_EVAL', 'BID_FIN_EVAL', 'WORK_ORDER', 
     'DRAFT_DPR_SUBMITTED', 'DRAFT_DPR_APPROVED', 'FINAL_DPR_SUBMITTED', 'FINAL_DPR_APPROVED',
     'DPR_SUBMITTED', 'DPR_APPROVED'
   ];
@@ -90,7 +90,10 @@ const validateWorkflowDates = (workflows) => {
     'NIT Published': 'NIT_PUBLISHED',
     'NIT Publication': 'NIT_PUBLISHED',
     'Tender Opened': 'TENDER_OPENED',
-
+    'Bid Technical Evaluation': 'BID_TECH_EVAL',
+    'Technical Evaluation Date': 'BID_TECH_EVAL',
+    'Bid Financial Evaluation': 'BID_FIN_EVAL',
+    'Financial Evaluation Date': 'BID_FIN_EVAL',
     'Work Order Issued': 'WORK_ORDER',
     'Work Order Release': 'WORK_ORDER'
   };
@@ -468,7 +471,8 @@ app.get('/api/projects', requireAuth, async (req, res) => {
             { stepName: 'Technical Sanction', stageKey: 'TECH_SANCTION', isCompleted: false, value: 'No' },
             { stepName: 'NIT Published', stageKey: 'NIT_PUBLISHED', isCompleted: false, value: 'No' },
             { stepName: 'Tender Opened', stageKey: 'TENDER_OPENED', isCompleted: false, value: 'No' },
-
+            { stepName: 'Bid Technical Evaluation', stageKey: 'BID_TECH_EVAL', isCompleted: false, value: 'No' },
+            { stepName: 'Bid Financial Evaluation', stageKey: 'BID_FIN_EVAL', isCompleted: false, value: 'No' },
             { stepName: 'Work Order Issued', stageKey: 'WORK_ORDER', isCompleted: false, value: 'No' }
           ];
           await tx.projectWorkflow.createMany({ data: defaults.map(d => ({ ...d, projectId: p.id })) });
@@ -581,7 +585,19 @@ app.post('/api/projects', requireManager, async (req, res) => {
           qualitySampling: projectBaseData.qualitySampling || "No",
           qualitySamplingReason: projectBaseData.qualitySamplingReason || "",
           delayReasons: projectBaseData.delayReasons ? JSON.stringify(projectBaseData.delayReasons) : null,
-          delayBrief: projectBaseData.delayBrief || null
+          delayBrief: projectBaseData.delayBrief || null,
+          bidTechEvalDate: (() => {
+            const w = workflows?.find(i => i.stageKey === 'BID_TECH_EVAL');
+            return (w && w.date && !isNaN(new Date(w.date).getTime())) ? new Date(w.date) : null;
+          })(),
+          bidTechEvalCompleted: workflows?.find(i => i.stageKey === 'BID_TECH_EVAL')?.value || "No",
+          bidTechEvalDelayReason: workflows?.find(i => i.stageKey === 'BID_TECH_EVAL')?.reason || null,
+          bidFinEvalDate: (() => {
+            const w = workflows?.find(i => i.stageKey === 'BID_FIN_EVAL');
+            return (w && w.date && !isNaN(new Date(w.date).getTime())) ? new Date(w.date) : null;
+          })(),
+          bidFinEvalCompleted: workflows?.find(i => i.stageKey === 'BID_FIN_EVAL')?.value || "No",
+          bidFinEvalDelayReason: workflows?.find(i => i.stageKey === 'BID_FIN_EVAL')?.reason || null
         },
         include: { workflows: true, pertActivities: true }
       });

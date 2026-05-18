@@ -158,6 +158,27 @@ export default function CycleUpdateWizard({ project, userId, userRole, onClose, 
         }
       }
     }
+
+    // 3. Bid Technical & Financial Evaluation Migration
+    const hasTech = w.some(item => (item.stageKey || MILESTONE_NAME_MAP[item.stepName]) === 'BID_TECH_EVAL');
+    const hasFin = w.some(item => (item.stageKey || MILESTONE_NAME_MAP[item.stepName]) === 'BID_FIN_EVAL');
+    const isSingleSource = project.type === 'CONSULTANCY' && project.consultancySource === 'SINGLE_SOURCE';
+    
+    if (!isSingleSource) {
+      if (!hasTech || !hasFin) {
+        const tech = { stageKey: 'BID_TECH_EVAL', stepName: 'Bid Technical Evaluation', isCompleted: false, value: 'No', reason: '', date: '' };
+        const fin = { stageKey: 'BID_FIN_EVAL', stepName: 'Bid Financial Evaluation', isCompleted: false, value: 'No', reason: '', date: '' };
+        
+        // Find insert index (before WORK_ORDER, after TENDER_OPENED)
+        const woIdx = w.findIndex(item => (item.stageKey || MILESTONE_NAME_MAP[item.stepName]) === 'WORK_ORDER');
+        if (woIdx !== -1) {
+          w.splice(woIdx, 0, tech, fin);
+        } else {
+          w.push(tech, fin);
+        }
+      }
+    }
+
     return sortWorkflows(w);
   });
 

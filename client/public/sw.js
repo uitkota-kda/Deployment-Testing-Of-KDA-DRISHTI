@@ -45,13 +45,19 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(request.url);
 
-  // 1. API Calls: Network-First Strategy
+  // CRITICAL FIX: Only handle http and https schemes (ignore chrome-extension, etc.)
+  if (!['http:', 'https:'].includes(url.protocol)) return;
+
+  // 1. API Calls: Network-First Strategy (Avoid caching sensitive data)
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          const resClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, resClone));
+          // Only cache successful API responses
+          if (response.status === 200) {
+            const resClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, resClone));
+          }
           return response;
         })
         .catch(() => caches.match(request))
@@ -76,12 +82,22 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
       const networkFetch = fetch(request).then((response) => {
-        const resClone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(request, resClone));
+        // Only cache valid standard responses
+        if (response && response.status === 200) {
+          const resClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, resClone));
+        }
         return response;
-      }).catch(() => null);
+      }).catch(() => {
+        // If network fails, we already have cachedResponse or we return null
+        return null;
+      });
 
-      return cachedResponse || networkFetch;
+      return cachedResponse || networkFetch || new Response('Offline content not available', {
+        status: 503,
+        statusText: 'Service Unavailable',
+        headers: new Headers({ 'Content-Type': 'text/plain' })
+      });
     })
   );
 });

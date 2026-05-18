@@ -4,7 +4,7 @@ import {
   CheckCircle, XCircle, AlertCircle, Layers, Type, 
   ChevronRight, ChevronDown, Check, Send
 } from 'lucide-react';
-import { api } from './App';
+import { api } from './services/api';
 
 const ConfigManager = () => {
   const [draft, setDraft] = useState({ stages: [], fields: [] });
@@ -160,7 +160,7 @@ const ConfigManager = () => {
             </div>
             <div className="stages-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {draft.stages.sort((a,b) => a.sequenceOrder - b.sequenceOrder).map((stage, idx) => (
-                <div key={idx} className="glass-card" style={{ padding: '1.25rem', display: 'flex', gap: '1.5rem', alignItems: 'center', borderLeft: `4px solid ${stage.isActive ? 'var(--primary)' : 'var(--text-muted)'}` }}>
+                <div key={idx} className="glass-card config-list-item" style={{ padding: '1.25rem', display: 'flex', gap: '1.5rem', alignItems: 'center', borderLeft: `4px solid ${stage.isActive ? 'var(--primary)' : 'var(--text-muted)'}` }}>
                   <div className="order-actions" style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                     <button className="icon-btn" onClick={() => moveStage(idx, -1)} disabled={idx === 0} title="Move Up">
                       <ArrowUp size={16} color="var(--text-primary)" />
@@ -214,7 +214,7 @@ const ConfigManager = () => {
             </div>
             <div className="fields-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {draft.fields.map((field, idx) => (
-                <div key={idx} className="glass-card" style={{ padding: '1.25rem', display: 'flex', gap: '1.5rem', alignItems: 'center', borderLeft: `4px solid ${field.isActive ? 'var(--secondary)' : 'var(--text-muted)'}` }}>
+                <div key={idx} className="glass-card config-list-item" style={{ padding: '1.25rem', display: 'flex', gap: '1.5rem', alignItems: 'center', borderLeft: `4px solid ${field.isActive ? 'var(--secondary)' : 'var(--text-muted)'}` }}>
                   
                   <div style={{ flex: 1 }}>
                     <label style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700 }}>Field Key</label>

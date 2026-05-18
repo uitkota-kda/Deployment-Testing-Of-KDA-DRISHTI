@@ -1,5 +1,5 @@
 export const CONFIG = {
-  API_BASE_URL: window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://deployment-testing-of-kda-drishti.onrender.com',
+  API_BASE_URL: 'http://localhost:5000',
   STORAGE_KEY: 'kda_user',
   DEFAULT_AGENCY: 'KDA',
   STATUS_LABELS: {

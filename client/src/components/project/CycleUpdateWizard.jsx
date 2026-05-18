@@ -162,7 +162,6 @@ export default function CycleUpdateWizard({ project, userId, userRole, onClose, 
     // 3. Bid Technical & Financial Evaluation Migration
     const hasTech = w.some(item => (item.stageKey || MILESTONE_NAME_MAP[item.stepName]) === 'BID_TECH_EVAL');
     const hasFin = w.some(item => (item.stageKey || MILESTONE_NAME_MAP[item.stepName]) === 'BID_FIN_EVAL');
-    const isSingleSource = project.type === 'CONSULTANCY' && project.consultancySource === 'SINGLE_SOURCE';
     
     if (!isSingleSource) {
       if (!hasTech || !hasFin) {
